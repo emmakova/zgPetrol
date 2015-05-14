@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+    xmlns:pm="http://primefaces.org/mobile">
+    
+    <f:view renderKitId="PRIMEFACES_MOBILE" />
+    
+    <h:head>
+    	<f:facet name="first">
+	        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+	        <link type="text/css" rel="stylesheet" href="css/main.css" />
+	        
+	        <title>PrimeFaces</title>
+         </f:facet>
+        
+    </h:head>
+    
+    <h:body>
+        <h:form>
+        <pm:page id="first">
+            <pm:header title="#{pumpControler.pump.name} / Spremnik" fixed="true">
+            	<p:commandButton id="btn-meni" value="Izbornik" type="button" styleClass="ui-btn-left ui-btn-inline" icon="ui-icon-bullets" />
+                <p:commandButton id="btn-basic" rendered="#{userSession.user.isAdmin}" type="button" styleClass="ui-btn-right ui-btn-inline" icon="ui-icon-plus" />
+            </pm:header>
+            
+            <pm:content>
+	            <div class="main">
+		            
+					<pm:field>
+			            
+
+						    <pm:field>
+						        <h:outputLabel value="Volumen (m3):"  />					        
+						        <p:inputText  type="number" value="#{tankControler.volumen}" />
+						    </pm:field>
+						    <pm:field>
+						        <h:outputLabel value="Pad (mm):" />					        
+						        <p:inputText type="number" value="#{tankControler.pad}"/>
+						    </pm:field>
+						    
+						    <pm:field>
+					            <p:outputLabel for="gorivo" value="Gorivo:" />
+							    <p:selectOneMenu id="gorivo" value="#{tankControler.gorivo}">
+							        <f:selectItem itemLabel="Odaberite gorivo" itemValue="" />
+							        <f:selectItem itemLabel="Eurosuper BS 95" itemValue="Eurosuper BS 95" />
+							        <f:selectItem itemLabel="Eurosuper BS 95 Class" itemValue="Eurosuper BS 95 Class" />
+							        <f:selectItem itemLabel="Eurosuper BS 98+ Class" itemValue="Eurosuper BS 98+ Class" />
+							        <f:selectItem itemLabel="Eurodiesel BS" itemValue="Eurodiesel BS" />
+							        <f:selectItem itemLabel="Eurodiesel BS Class " itemValue="Eurodiesel BS Class " />
+							    </p:selectOneMenu>
+					         </pm:field>
+	        				 <pm:field>
+					            <p:outputLabel for="brojKosara" value="Broj Košara:" />
+							    <p:selectOneMenu id="brojKosara" value="#{tankControler.br_kosara}">
+							        <f:selectItem itemLabel="Odaberite Broj Košara" itemValue="" />
+							        <f:selectItem itemLabel="1" itemValue= "1" />
+							        <f:selectItem itemLabel="2" itemValue="2" />
+							        <f:selectItem itemLabel="3" itemValue="3" />
+							        <f:selectItem itemLabel="4" itemValue="4" />
+							        <f:selectItem itemLabel="5" itemValue="5" />
+							        <f:selectItem itemLabel="6" itemValue="6" />
+							    </p:selectOneMenu>
+					         </pm:field>
+					         <pm:field>
+		       					<p:commandButton value="Spremi" icon="ui-icon-check" process="@all" update="@all" ajax="false"  actionListener="#{tankControler.insertTank()}"/>
+		       				</pm:field>
+						
+		            </pm:field>
+	            </div>
+            </pm:content>
+            <p:overlayPanel for="btn-meni" widgetVar="pnl-meni" at="left" showEffect="overlay">
+	            	<h:outputLink value="userProfile.xhtml"><h:outputText value="#{userSession.user.firstName} #{userSession.user.lastName}" /></h:outputLink>
+				<div style="clear:both" />
+				<br/>
+			     <p:menu>
+                    <p:menuitem value="Pretraga" icon="ui-icon-search" url="search.xhtml" iconPos="left"/>
+			         <p:menuitem value="Logout" icon="ui-icon-power" action="#{userSession.logout()}" iconPos="left"/>
+			     </p:menu>
+			 </p:overlayPanel>
+            <p:overlayPanel for="btn-basic" widgetVar="pnl-basic" at="right" showEffect="overlay">
+			     <p:menu>
+					<p:menuitem value="Dodaj / Ukloni Korisnika" icon="ui-icon-plus" url="addUser.xhtml" iconPos="left" />
+					<p:menuitem value="Dodaj Pumpu" icon="ui-icon-plus" url="addPump.xhtml" iconPos="left"/>
+				</p:menu>
+			 </p:overlayPanel>
+            
+            
+        </pm:page>
+      </h:form>
+    </h:body>
+    
+</html>

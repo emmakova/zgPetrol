@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+    xmlns:pm="http://primefaces.org/mobile">
+    
+    <f:view renderKitId="PRIMEFACES_MOBILE" />
+    
+	<h:head>
+	
+	   <f:facet name="first">
+	        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+	        <link type="text/css" rel="stylesheet" href="css/main.css" />
+	        <title>PrimeFaces</title>
+         </f:facet>
+	</h:head>
+    
+    <h:body>
+    
+    	<h:form id="loginForm">
+	    	<div class="login">	
+	    	
+	 			<p:growl id="userGrowl" sticky="true" showDetail="true" />
+				<pm:field>
+		            <h:outputLabel for="username" value="Username:" />
+		            <p:inputText id="username" value="#{loginControler.username}" />
+	            </pm:field>
+	            
+	            <pm:field>
+		            <h:outputLabel for="password" value="Lozinka:" />
+		            <p:password id="password" value="#{loginControler.password}" />
+	            </pm:field>
+	            
+	 			<p:commandButton value="Ulogiraj se" action="#{loginControler.loginControl()}" update="@all" />
+	 			<ui:debug />
+			</div>
+    	</h:form>
+    </h:body>
+</html>

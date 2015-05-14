@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+    xmlns:pm="http://primefaces.org/mobile"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <f:view renderKitId="PRIMEFACES_MOBILE" />
+    
+    <h:head>
+    	<f:facet name="first">
+	        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+	        <link type="text/css" rel="stylesheet" href="css/main.css" />
+	        
+	        <title>PrimeFaces</title>
+         </f:facet>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+        
+    </h:head>
+    
+    <h:body>
+        <h:form>
+        
+	        <p:growl id="growl" sticky="true" showDetail="true" />
+	        
+	        <pm:page id="first">
+	            <pm:header title="#{pumpControler.pump.name}" fixed="true">
+	            	<p:commandButton id="btn-meni" value="Izbornik" type="button" styleClass="ui-btn-left ui-btn-inline" icon="ui-icon-bullets" />
+	                <p:commandButton id="btn-basic" rendered="#{userSession.user.isAdmin}" type="button" styleClass="ui-btn-right ui-btn-inline" icon="ui-icon-plus" />
+	            </pm:header>
+            
+            <!-- ______________________ MAPA ______________________ -->
+            <pm:content>
+	            <div class="main">
+	            	<p:gmap style="width:100%; height:300px" 
+			            	zoom="17"
+			            	model="#{pumpControler.map}" 
+			            	center="#{pumpControler.pump.latitude}, #{pumpControler.pump.longitude}"
+			            	type="HYBRID" 
+			            	widgetVar="wmap" 
+			            	styleClass="map"/>
+	            	
+	            	<h:inputHidden id="lat" value="#{pumpControler.pump.latitude}" />
+        			<h:inputHidden id="lng" value="#{pumpControler.pump.longitude}" />
+        			 
+        	<!-- ______________________ PODACI O PUMPI ______________________ -->
+					<div style="clear:both" />
+						<h2><h:outputText value="#{pumpControler.fullAddress}" styleClass="outputLabel"/></h2>
+						<p:panelGrid columns="2" >
+						
+							<h:outputLabel value="Adresa:" for="address" />
+							<h:outputText id="address" value="#{pumpControler.pump.address}" styleClass="outputLabel"/>
+							
+							<h:outputLabel value="Kontakt:" for="contact" />
+							<h:outputText id="contact" value="#{pumpControler.pump.contact}" styleClass="outputLabel"/>
+			            	
+			            	<h:outputLabel value="Radno vrijeme:" for="wt" />
+			            	<h:outputText id="wt" value="#{pumpControler.pump.workingTime}" styleClass="outputLabel"/>
+					    </p:panelGrid>   
+					    	
+			<!-- ______________________ SEPARATOR I SPREMNIK ______________________ -->		
+				        <pm:field>
+					        <p:button outcome="separator" value="Separator" icon="ui-icon-carat-r" iconPos="right" />
+					        <p:button outcome="tank" value="Spremnik" icon="ui-icon-carat-r"  iconPos="right"/>
+					    </pm:field> 
+					    
+						
+			<!-- ______________________ LISTA CHANGESA ______________________ -->
+						<pm:field>
+							<h5 style="text-align: center;">Zadnje Izmjene</h5>
+						</pm:field>
+									
+						<pm:field>
+							<div id="scrol" style="overflow-y:inherit; overflow-x:hidden; height:300px;">
+						 		<p:dataList value="#{pumpControler.changes}" 
+											 var="change" 
+											 id="changes">
+									<pm:field>
+										<div>
+										<div style="float:left; width:100px">
+													<p:commandButton icon="ui-icon-delete" title="Obrisi promjenu" styleClass="ui-btn-inline" iconPos="left"
+								                    	   action="#{changeControler.removeChange(change)}" update="changes" execute="@none">
+								                    </p:commandButton>
+								                    <p:commandButton icon="ui-icon-edit" title="Uredi promjenu" styleClass="ui-btn-inline" iconPos="left"
+								                    	     action="#{changeControler.editChange(change)}">
+								                    </p:commandButton>
+							                 </div>
+											<div style="float: left">
+												<h:outputText value="&lt;b&gt;#{change.user} - #{change.date}&lt;/b&gt; &lt;br/&gt;&lt;br/&gt; #{change.description}" escape="false"/>
+											</div>
+											
+							               </div>
+					                    </pm:field>  
+					                    
+					                    <!-- ______________________ EDIT DIALOG ______________________ -->
+								
+					
+								</p:dataList>
+							</div> 
+					</pm:field>
+					
+					
+				</div>
+           </pm:content>
+           
+           <!-- ______________________ OPCIJE IZ HEADERA ______________________ -->
+           <p:overlayPanel for="btn-meni" widgetVar="pnl-meni" at="left" showEffect="overlay">
+	            	<h:outputLink value="userProfile.xhtml"><h:outputText value="#{userSession.user.firstName} #{userSession.user.lastName}" /></h:outputLink>
+				<div style="clear:both" />
+				<br/>
+			     <p:menu>
+                    <p:menuitem value="Pretraga" icon="ui-icon-search" url="search.xhtml" iconPos="left"/>
+			         <p:menuitem value="Logout" icon="ui-icon-power" action="#{userSession.logout()}" iconPos="left"/>
+			     </p:menu>
+			 </p:overlayPanel>
+            <p:overlayPanel for="btn-basic" widgetVar="pnl-basic" at="right" showEffect="overlay">
+			     <p:menu>
+			     	<p:menuitem value="Dodaj Izmjenu" icon="ui-icon-plus"  action="#{changeControler.addChange()}" iconPos="left"/>
+					<p:menuitem value="Dodaj Separator" icon="ui-icon-plus" action="#{separatorControler.addSeparator()}" iconPos="left"/>
+                    <p:menuitem value="Dodaj Spremnik" icon="ui-icon-plus" action="#{tankControler.addTank()}" iconPos="left"/>
+                    <p:separator/>
+                    <p:menuitem value="Dodaj / Ukloni Korisnika" icon="ui-icon-plus" url="addUser.xhtml" iconPos="left"/>
+                    <p:menuitem value="Dodaj Pumpu" icon="ui-icon-plus" url="addPump.xhtml" iconPos="left"/>
+                    <p:separator/>
+                    <p:menuitem value="Uredi Pumpu" icon="ui-icon-plus" url="editPump.xhtml" iconPos="left"/>
+                    <p:menuitem value="Ukloni Pumpu" icon="ui-icon-plus" onclick="PF('dlgRP').show();" iconPos="left"/>
+			     </p:menu>
+			 </p:overlayPanel>
+            <p:dialog header="Header" widgetVar="dlgRP" showEffect="pop">
+			    <h:outputText value="Pumpa #{pumpControler.pump.name} ce biti izbrisana"/>
+			    <p:commandButton value="Obrisi pumpu" action="#{pumpControler.removePump()}"></p:commandButton>
+			</p:dialog>
+            
+        </pm:page>
+      </h:form>
+    </h:body>
+    
+</html>

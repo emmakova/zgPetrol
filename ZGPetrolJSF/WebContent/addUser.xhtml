@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+    xmlns:pm="http://primefaces.org/mobile">
+    
+    <f:view renderKitId="PRIMEFACES_MOBILE" />
+    
+    <h:head>
+    	<f:facet name="first">
+	        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+	        <link type="text/css" rel="stylesheet" href="css/main.css" />
+	        
+	        <title>PrimeFaces</title>
+         </f:facet>
+    </h:head>
+    
+    <h:body>
+        <h:form>
+        
+        <p:growl id="growl" sticky="true" showDetail="true" />
+        
+        <pm:page id="first">
+            <pm:header title="Dodaj - Ukloni Korisnika" fixed="true">
+            	<p:commandButton id="btn-meni" value="Izbornik" type="button" styleClass="ui-btn-left ui-btn-inline" icon="ui-icon-bullets" />
+                <p:commandButton id="btn-basic" rendered="#{userSession.user.isAdmin}" type="button" styleClass="ui-btn-right ui-btn-inline" icon="ui-icon-plus" />
+            </pm:header>
+            
+            <pm:content>
+	            <div class="main">
+                    	
+                        <pm:field>
+                            <p:outputLabel for="firstname" value="Ime" />
+                            <p:inputText id="firstname" value="#{userControler.firstName}" />
+                        </pm:field>
+ 
+                        <pm:field>
+                            <p:outputLabel for="surname" value="Prezime" />
+                            <p:inputText id="surname" value="#{userControler.lastName}" />
+                        </pm:field>
+                        <pm:field>
+                            <p:outputLabel for="username" value="Korisničko ime" />
+                            <p:inputText id="username" value="#{userControler.username}" />
+                        </pm:field>
+ 
+                        <pm:field>
+                            <p:outputLabel for="password" value="Lozinka" />
+                            <p:inputText id="password" value="#{userControler.password}" />
+                        </pm:field>
+                        
+                        <!-- Dali je admin? -->
+						<pm:field>
+						    <p:outputLabel for="isAdmin" value="Dali je Admin" />
+						    <p:selectBooleanCheckbox id="isAdmin" itemLabel="Da" value="#{userControler.admin}" />
+						</pm:field>
+                        
+				         <pm:field>
+	       					<p:commandButton value="Dodaj korisnika" icon="ui-icon-check" process="@all" update="@all" ajax="false"  actionListener="#{userControler.insertUser()}"/>
+	       				</pm:field>
+	       				
+	       				<p:separator/>
+	       				
+	       				<pm:field>
+						    <p:selectOneMenu id="user" value="#{userControler.user}" >
+						     	<f:selectItem itemLabel="Odaberite korisnika kojeg zelite obrisati" itemValue="" noSelectionOption="true" />
+						        <f:selectItems value="#{userControler.users}" var="u" itemLabel="#{u.firstName} #{u.lastName}" itemValue="#{u}"/>
+						    </p:selectOneMenu>
+						</pm:field>
+	       				
+	       				<pm:field>
+	       					<p:commandButton value="Ukloni korisnika" icon="ui-icon-check" process="@all" update="@all" ajax="false" render="user" actionListener="#{userControler.removeUser()}"/>
+	       				</pm:field>
+	       				
+	            </div>
+            </pm:content>
+            <p:overlayPanel for="btn-meni" widgetVar="pnl-meni" at="left" showEffect="overlay">
+	            	<h:outputLink value="userProfile.xhtml"><h:outputText value="#{userSession.user.firstName} #{userSession.user.lastName}" /></h:outputLink>
+				<div style="clear:both" />
+				<br/>
+			     <p:menu>
+                    <p:menuitem value="Pretraga" icon="ui-icon-search" url="search.xhtml" iconPos="left"/>
+			         <p:menuitem value="Logout" icon="ui-icon-power" action="#{userSession.logout()}" iconPos="left"/>
+			     </p:menu>
+			 </p:overlayPanel>
+            <p:overlayPanel for="btn-basic" widgetVar="pnl-basic" at="right" showEffect="overlay">
+			     <p:menu>
+					<p:menuitem value="Dodaj / Ukloni Korisnika" icon="ui-icon-plus" url="addUser.xhtml" iconPos="left" />
+					<p:menuitem value="Dodaj Pumpu" icon="ui-icon-plus" url="addPump.xhtml" iconPos="left"/>
+				</p:menu>
+			 </p:overlayPanel>
+           
+            
+        </pm:page>
+      </h:form>
+    </h:body>
+    
+</html>

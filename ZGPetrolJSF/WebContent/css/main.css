@@ -1,0 +1,50 @@
+@CHARSET "UTF-8";
+a{
+	text-decoration: none;
+}
+.clear{
+	clear: both;
+}
+.left{
+	float: left;
+}
+.right{
+	float:right;
+}
+
+.login{
+		padding-top:50px;
+		width: 400px;
+		margin: 0 auto;
+	}
+.popUpDialog{
+	width: 270px;
+	}
+	
+.icon{
+	float: left;
+	padding: 0px 5px 10px 0px
+}
+.map{
+	border: 1px solid black;
+}
+@media all and (min-width: 1001px) {
+		.main{
+		width: 960px;
+		margin: 0 auto;
+	}
+	.popUpDialog{
+		width: 500px;
+	}
+
+	
+	
+}
+
+@media all and (max-width: 1000px) and (min-width: 700px) {
+  
+}
+
+@media all and (max-width: 699px) and (min-width: 520px), (min-width: 1151px) {
+  
+}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+    xmlns:pm="http://primefaces.org/mobile"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    
+    <f:view renderKitId="PRIMEFACES_MOBILE" />
+    
+    <h:head>
+    	<f:facet name="first">
+	        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+	        <link type="text/css" rel="stylesheet" href="css/main.css" />
+	        
+	        <title>PrimeFaces</title>
+         </f:facet>
+        
+    </h:head>
+    
+    <h:body>
+    <h:form>
+        
+        <p:growl id="growl" sticky="true" showDetail="true" />
+        
+        <pm:page id="first">
+            <pm:header title="#{pumpControler.pump.name} / Separator" fixed="true">
+            	<p:commandButton id="btn-meni" value="Izbornik" type="button" styleClass="ui-btn-left ui-btn-inline" icon="ui-icon-bullets" />
+                <p:commandButton id="btn-basic" rendered="#{userSession.user.isAdmin}" type="button" styleClass="ui-btn-right ui-btn-inline" icon="ui-icon-plus" />
+            </pm:header>
+            
+            <pm:content>
+           		<p:dataList value="#{separatorControler.separators}" 
+								 var="separator" 
+								 id="separators">
+						<pm:field>
+						<div>
+							<div style="float:left; width:100px">
+								<p:commandButton icon="ui-icon-delete" title="Obrisi separator" styleClass="ui-btn-inline" iconPos="left"
+					                    	   action="#{separatorControler.removeSeparator(separator)}" update="separators" execute="@none">
+					           	</p:commandButton>
+			                    <p:commandButton icon="ui-icon-edit" title="Uredi separator" styleClass="ui-btn-inline" iconPos="left"
+			                    	      action="#{separatorControler.editSeparator(separator)}" >
+			                    </p:commandButton>
+				            </div>
+				                    <div style="float:left; width:500px">
+										<p:panelGrid columns="2">
+											<h:outputLabel for="kanalice" value="Kanalice (m):" />	
+							    			<h:outputText id="kanalice" value="#{separator.kanalica}" />
+							    			
+							    			<h:outputLabel for="slivnici" value="Slivnici (kom):" />
+							    			<h:outputText id="slivnici" value="#{separator.slivnici}" />
+							    			
+							    			<h:outputLabel for="okna" value="Okna (kom):" />
+							    			<h:outputText id="okna" value="#{separator.okna}" />
+							              
+					                    </p:panelGrid>
+		                    		</div>
+		                    </div>
+	                    </pm:field>  
+	            </p:dataList>
+	        </pm:content>
+	        
+            <p:overlayPanel for="btn-meni" widgetVar="pnl-meni" at="left" showEffect="overlay">
+	            	<h:outputLink value="userProfile.xhtml"><h:outputText value="#{userSession.user.firstName} #{userSession.user.lastName}" /></h:outputLink>
+				<div style="clear:both" />
+				<br/>
+			     <p:menu>
+                    <p:menuitem value="Pretraga" icon="ui-icon-search" url="search.xhtml" iconPos="left"/>
+			         <p:menuitem value="Logout" icon="ui-icon-power" action="#{userSession.logout()}" iconPos="left"/>
+			     </p:menu>
+			 </p:overlayPanel>
+            <p:overlayPanel for="btn-basic" widgetVar="pnl-basic" at="right" showEffect="overlay">
+			     <p:menu>
+					<p:menuitem value="Dodaj / Ukloni Korisnika" icon="ui-icon-plus" url="addUser.xhtml" iconPos="left" />
+					<p:menuitem value="Dodaj Pumpu" icon="ui-icon-plus" url="addPump.xhtml" iconPos="left"/>
+				</p:menu>
+			 </p:overlayPanel>
+            
+
+        </pm:page>
+      </h:form>
+    </h:body>
+    
+</html>

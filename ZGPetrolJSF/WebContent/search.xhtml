@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+    xmlns:pm="http://primefaces.org/mobile">
+    
+    <f:view renderKitId="PRIMEFACES_MOBILE"  />
+    
+    <h:head>
+    	<f:facet name="first">
+	        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+	        <link type="text/css" rel="stylesheet" href="css/main.css" />
+	        
+	        <title>PrimeFaces</title>
+         </f:facet>
+    </h:head>
+    
+    <h:body>
+    <h:form>
+        <pm:page id="first">
+            <pm:header title="Pretraga Pumpi" fixed="true">
+                <p:commandButton id="btn-meni" value="Izbornik" type="button" styleClass="ui-btn-left ui-btn-inline" icon="ui-icon-bullets" />
+                <p:commandButton id="btn-basic" rendered="#{userSession.user.isAdmin}" type="button" styleClass="ui-btn-right ui-btn-inline" icon="ui-icon-plus" />
+            </pm:header>
+            
+            <p:growl id="userGrowl" sticky="true" showDetail="true" />
+            
+            <pm:content>
+            <div class="main">
+                <pm:field>
+				    <p:selectOneMenu id="country" value="#{search.country}" >
+				     	<p:ajax listener="#{search.onCountryChange()}" render="region" update="@all"/>
+				    	<f:selectItem itemLabel="Odaberi drzavu" itemValue="" noSelectionOption="true" />
+				        <f:selectItems value="#{search.countries}" var="c" itemLabel="#{c.name}" itemValue="#{c}"/>
+				    </p:selectOneMenu>
+				</pm:field>
+				<pm:field>
+				    <p:selectOneMenu id="region" value="#{search.region}">
+				    	<f:ajax listener="#{search.onRegionChange()}" render="city" update="@all"/>
+				        <f:selectItem itemLabel="Odaberi regiju" itemValue="" noSelectionOption="true" />
+				        <f:selectItems value="#{search.regions}" var="r" itemLabel="#{r.name}" itemValue="#{r}"/>
+				    </p:selectOneMenu>
+				</pm:field>
+				<pm:field>
+				    <p:selectOneMenu id="city" value="#{search.city}">
+				        <p:ajax listener="#{search.onCityChange()}" render="company" update="@all" />
+				    	<f:selectItem itemLabel="Odaberi grad" itemValue="" noSelectionOption="true" />
+				        <f:selectItems value="#{search.cities}" var="c" itemLabel="#{c.name}" itemValue="#{c}"/>
+				    </p:selectOneMenu>
+				</pm:field>  
+				<pm:field>
+				    <p:selectOneMenu id="company"  value="#{search.company}">
+				        <p:ajax listener="#{search.onCompanyChange()}" render="pump" update="@all" />
+				    	<f:selectItem itemLabel="Odaberi kompaniju" itemValue="" noSelectionOption="true" />
+				        <f:selectItems value="#{search.companies}" var="c" itemLabel="#{c.name}" itemValue="#{c}"/>
+				    </p:selectOneMenu>
+				</pm:field>
+				<pm:field>
+				    <p:selectOneMenu id="pump" value="#{search.pump}" required="true">
+				    	<f:selectItem itemLabel="Odaberi pumpu" itemValue="" noSelectionOption="true"/>
+				        <f:selectItems value="#{search.pumps}" var="p" itemLabel="#{p.name}" itemValue="#{p}"/>
+				    </p:selectOneMenu>
+				</pm:field>
+				<p:commandButton actionListener="#{userSession.init}" update="userGrowl" value="Pretraži" action="pump?faces-redirect=true" icon="ui-icon-search"  />
+			 </div>	
+            </pm:content>
+            <p:overlayPanel for="btn-meni" widgetVar="pnl-meni" at="left" showEffect="overlay">
+	            	<h:outputLink value="userProfile.xhtml"><h:outputText value="#{userSession.user.firstName} #{userSession.user.lastName}" /></h:outputLink>
+				<div style="clear:both" />
+				<br/>
+			     <p:menu>
+                    <p:menuitem value="Pretraga" icon="ui-icon-search" url="search.xhtml" iconPos="left"/>
+			         <p:menuitem value="Logout" icon="ui-icon-power" action="#{userSession.logout()}" process="@this" immediate="true" iconPos="left"/>
+			     </p:menu>
+			 </p:overlayPanel>
+            <p:overlayPanel for="btn-basic" widgetVar="pnl-basic" at="right" showEffect="overlay">
+			     <p:menu>
+                    <p:menuitem value="Dodaj / Ukloni Korisnika" icon="ui-icon-plus" url="addUser.xhtml" iconPos="left"/>
+                    <p:menuitem value="Dodaj Pumpu" icon="ui-icon-plus" url="addPump.xhtml" iconPos="left"/>
+			     </p:menu>
+			 </p:overlayPanel>
+
+        </pm:page>
+        </h:form>
+    </h:body>
+    
+</html>
